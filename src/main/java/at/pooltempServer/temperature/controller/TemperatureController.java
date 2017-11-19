@@ -25,12 +25,12 @@ public class TemperatureController {
 
 	@RequestMapping(method = RequestMethod.POST)
 	private @ResponseBody Temperature addTemperature(@RequestParam(name = "temp", required = true) double temp,
-			@RequestParam(name = "date", required = false) Date date) {
+			@RequestParam(name = "date", required = false) long dateAsLong) {
 		Temperature temperature = new Temperature();
-		if (date == null) {
+		if (dateAsLong == 0) {
 			temperature.setTime(new Date());
 		} else {
-			temperature.setTime(date);
+			temperature.setTime(new Date(dateAsLong));
 		}
 		temperature.setTemperature(temp);
 		System.out.println("new Temperature saved: " + temperature.getTemperature());
@@ -51,7 +51,7 @@ public class TemperatureController {
 		return temperatureList;
 	}
 	
-	@RequestMapping(method=RequestMethod.GET)
+	@RequestMapping(method=RequestMethod.GET, path="/since")
 	private @ResponseBody List<Temperature> getTemperatureSince(@RequestParam(name="since", required=true) Date since){
 		ArrayList<Temperature> temperatureList=new ArrayList<>();
 		temperaturePersister.findAll().forEach(temperatureList::add);
