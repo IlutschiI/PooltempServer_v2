@@ -3,6 +3,7 @@ package at.pooltempServer.temperature.controller;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,6 +48,13 @@ public class TemperatureController {
 		ArrayList<Temperature> temperatureList = new ArrayList<>();
 		temperaturePersister.findAll().forEach(temperatureList::add);
 		return temperatureList;
+	}
+	
+	@RequestMapping(method=RequestMethod.GET)
+	private @ResponseBody List<Temperature> getTemperatureSince(@RequestParam(name="since", required=true) Date since){
+		ArrayList<Temperature> temperatureList=new ArrayList<>();
+		temperaturePersister.findAll().forEach(temperatureList::add);
+		return temperatureList.stream().filter(t->t.getTime().after(since)).collect(Collectors.toList());
 	}
 
 }
