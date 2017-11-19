@@ -33,6 +33,7 @@ public class TemperatureController {
 			temperature.setTime(date);
 		}
 		temperature.setTemperature(temp);
+		System.out.println("new Temperature saved: " + temperature.getTemperature());
 		return temperaturePersister.save(temperature);
 	}
 
