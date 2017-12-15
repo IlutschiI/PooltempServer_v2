@@ -52,10 +52,10 @@ public class TemperatureController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, path="/since")
-	private @ResponseBody List<Temperature> getTemperatureSince(@RequestParam(name="since", required=true) Date since){
+	private @ResponseBody List<Temperature> getTemperatureSince(@RequestParam(name="since", required=true) long since){
 		ArrayList<Temperature> temperatureList=new ArrayList<>();
 		temperaturePersister.findAll().forEach(temperatureList::add);
-		return temperatureList.stream().filter(t->t.getTime().after(since)).collect(Collectors.toList());
+		return temperatureList.stream().filter(t->t.getTime().after(new Date(since))).collect(Collectors.toList());
 	}
 
 }

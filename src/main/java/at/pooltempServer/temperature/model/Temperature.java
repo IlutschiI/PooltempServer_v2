@@ -15,6 +15,7 @@ public class Temperature {
 	private int id;
 	private Date time;
 	private double temperature;
+	private TemperatureType temperatureType;
 
 	public int getId() {
 		return id;
@@ -38,6 +39,14 @@ public class Temperature {
 
 	public void setTemperature(double temperature) {
 		this.temperature = temperature;
+	}
+
+	public TemperatureType getTemperatureType() {
+		return temperatureType;
+	}
+
+	public void setTemperatureType(TemperatureType temperatureType) {
+		this.temperatureType = temperatureType;
 	}
 
 }
