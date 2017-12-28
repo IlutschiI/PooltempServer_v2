@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +24,15 @@ public class TemperatureController {
 	@Autowired
 	private TemperatureRepository temperaturePersister;
 
+	@RequestMapping(method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE,path="/new")
+	private @ResponseBody Temperature addTemperature(@RequestBody Temperature temp) {
+		System.out.println("id: "+temp.getId());
+		System.out.println("sensorID: "+temp.getSensorID());
+		System.out.println("temperature: "+temp.getTemperature());
+		System.out.println("time: "+temp.getTime());
+		return temp;
+	}
+	
 	@RequestMapping(method = RequestMethod.POST)
 	private @ResponseBody Temperature addTemperature(@RequestParam(name = "temp", required = true) double temp,
 			@RequestParam(name = "date", required = false) long dateAsLong) {
