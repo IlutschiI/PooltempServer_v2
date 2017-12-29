@@ -26,11 +26,10 @@ public class TemperatureController {
 
 	@RequestMapping(method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE,path="/new")
 	private @ResponseBody Temperature addTemperature(@RequestBody Temperature temp) {
-		System.out.println("id: "+temp.getId());
-		System.out.println("sensorID: "+temp.getSensorID());
-		System.out.println("temperature: "+temp.getTemperature());
-		System.out.println("time: "+temp.getTime());
-		return temp;
+		if(temp.getTime()==null) {
+			temp.setTime(new Date());
+		}
+		return temperaturePersister.save(temp);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST)
@@ -49,7 +48,8 @@ public class TemperatureController {
 
 	@RequestMapping(method = RequestMethod.POST, path = "/addAll")
 	private @ResponseBody String addAllTemperature(@RequestBody List<Temperature> payload) {
-		payload.forEach(p -> temperaturePersister.save(p));
+		temperaturePersister.save(payload);
+		//payload.forEach(p -> temperaturePersister.save(p));
 
 		return "OK";
 	}
