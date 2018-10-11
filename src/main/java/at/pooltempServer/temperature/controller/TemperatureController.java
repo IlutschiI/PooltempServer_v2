@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import at.pooltempServer.temperature.model.TemperatureDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import at.pooltempServer.temperature.database.TemperatureRepository;
 import at.pooltempServer.temperature.model.Temperature;
 
+@CrossOrigin(origins="*")
 @Controller
 @RequestMapping("/temperature")
 public class TemperatureController {
@@ -60,12 +63,31 @@ public class TemperatureController {
 		temperaturePersister.findAll().forEach(temperatureList::add);
 		return temperatureList;
 	}
+
+	@RequestMapping(method = RequestMethod.GET, path = "/dto")
+	private @ResponseBody List<TemperatureDTO> getAllTemperatureDTOs() {
+		ArrayList<TemperatureDTO> temperatureList = new ArrayList<>();
+		temperaturePersister.findAll().forEach(t->temperatureList.add(mapToDTO(t)));
+		return temperatureList;
+	}
 	
 	@RequestMapping(method=RequestMethod.GET,params="since")
 	private @ResponseBody List<Temperature> getTemperatureSince(@RequestParam(name="since", required=true) long since){
 		ArrayList<Temperature> temperatureList=new ArrayList<>();
 		temperaturePersister.findAll().forEach(temperatureList::add);
 		return temperatureList.stream().filter(t->t.getTime().after(new Date(since))).collect(Collectors.toList());
+	}
+
+	private @ResponseBody Temperature getLatestTemperature(@RequestParam(name="sensor", required = true)String sensor){
+	    return null;
+    }
+
+    private TemperatureDTO mapToDTO(Temperature temperature){
+		TemperatureDTO temperatureDTO = new TemperatureDTO();
+		temperatureDTO.setSensorID(temperature.getSensorID());
+		temperatureDTO.setTemperature(temperature.getTemperature());
+		temperatureDTO.setTime(temperature.getTime());
+		return temperatureDTO;
 	}
 
 }
