@@ -78,8 +78,11 @@ public class TemperatureController {
 		return temperatureList.stream().filter(t->t.getTime().after(new Date(since))).collect(Collectors.toList());
 	}
 
+	@RequestMapping(method = RequestMethod.GET, path = "/latest", params = "sensor")
 	private @ResponseBody Temperature getLatestTemperature(@RequestParam(name="sensor", required = true)String sensor){
-	    return null;
+
+        List<Temperature> temperatures = temperaturePersister.findTemperatureBySensorID(sensor);
+        return temperatures.get(temperatures.size()-1);
     }
 
     private TemperatureDTO mapToDTO(Temperature temperature){
