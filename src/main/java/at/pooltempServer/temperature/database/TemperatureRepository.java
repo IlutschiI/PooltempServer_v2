@@ -10,14 +10,4 @@ import java.util.Date;
 import java.util.List;
 
 public interface TemperatureRepository extends CrudRepository<Temperature, Long> {
-
-    List<Temperature> findTemperatureBySensorID(String sensorId);
-
-    Temperature findFirstBySensorIDOrderByTemperatureDesc(String sensorId);
-
-    Temperature findFirstBySensorIDOrderByTemperatureAsc(String sensorId);
-
-    List<Temperature> findTemperatureByTimeBetween(Date startDate, Date endDate);
-
-    List<Temperature> findTemperatureBySensorIDAndTimeBetween(String sensorId, Date startDate, Date endDate);
 }

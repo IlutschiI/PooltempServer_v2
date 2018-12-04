@@ -9,7 +9,7 @@ import at.pooltempServer.sensor.model.Sensor;
 
 public interface SensorRepository extends CrudRepository<Sensor, String> {
 	
-	@Query("Select distinct t.sensorID from Temperature t")
+	@Query("Select distinct s.id from Sensor s")
 	List<String> findSensorIDs();
 	
 }

@@ -1,52 +1,50 @@
 package at.pooltempServer.temperature.model;
 
+import at.pooltempServer.sensor.model.Sensor;
+
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Temperature {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private int id;
-	private Date time;
-	private double temperature;
-	private String sensorID;
-	
-	public int getId() {
-		return id;
-	}
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    private Date time;
+    private double temperature;
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    public Temperature() {
+    }
 
-	public Date getTime() {
-		return time;
-	}
+    public Temperature(Date time, double temperature) {
+        this.time = time;
+        this.temperature = temperature;
+    }
 
-	public void setTime(Date date) {
-		this.time = date;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public double getTemperature() {
-		return temperature;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setTemperature(double temperature) {
-		this.temperature = temperature;
-	}
+    public Date getTime() {
+        return time;
+    }
 
-	public String getSensorID() {
-		return sensorID;
-	}
+    public void setTime(Date date) {
+        this.time = date;
+    }
 
-	public void setSensorID(String sensorID) {
-		this.sensorID = sensorID;
-	}
+    public double getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(double temperature) {
+        this.temperature = temperature;
+    }
 
 }

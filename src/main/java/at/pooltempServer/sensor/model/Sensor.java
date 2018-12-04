@@ -1,14 +1,24 @@
 package at.pooltempServer.sensor.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import at.pooltempServer.temperature.model.Temperature;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
+@Table(name = "sensor")
 public class Sensor {
 
 	@Id
 	private String id;
 	private String name;
+	@LazyCollection(LazyCollectionOption.FALSE)
+	@JoinColumn(name = "sensorid", nullable = false)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<Temperature> temperatures=new ArrayList<>();
 
 	public String getId() {
 		return id;
@@ -26,4 +36,19 @@ public class Sensor {
 		this.name = name;
 	}
 
+	public List<Temperature> getTemperatures() {
+		return temperatures;
+	}
+
+	public void setTemperatures(List<Temperature> temperatures) {
+		this.temperatures = temperatures;
+	}
+
+	public void addTemperature(Temperature temperature){
+		temperatures.add(temperature);
+	}
+
+	public  void removeTemperature(Temperature temperature){
+		temperatures.remove(temperature);
+	}
 }
