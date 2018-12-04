@@ -2,8 +2,8 @@ package at.pooltempServer.sensor.controller;
 
 import java.util.List;
 
+import at.pooltempServer.sensor.model.SensorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import at.pooltempServer.sensor.database.SensorRepository;
 import at.pooltempServer.sensor.model.Sensor;
-import at.pooltempServer.temperature.model.Temperature;
 
 @Controller
 @RequestMapping("/sensor")
@@ -38,6 +37,13 @@ public class SensorController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET)
+	private @ResponseBody List<SensorDTO> findAllWithoutTemperature() {
+		return sensorRepository.findAllWithoutTemperatures();
+		//payload.forEach(p -> temperaturePersister.save(p));
+
+	}
+
+	@RequestMapping(method = RequestMethod.GET, path = "/temperatures")
 	private @ResponseBody Iterable<Sensor> findAll() {
 		return sensorRepository.findAll();
 		//payload.forEach(p -> temperaturePersister.save(p));
