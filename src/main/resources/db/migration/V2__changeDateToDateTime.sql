@@ -1,0 +1,1 @@
+ALTER TABLE temperature CHANGE time time DATETIME;
