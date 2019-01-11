@@ -110,6 +110,22 @@ public class TemperatureController {
         return temperatureDTOS.stream().findFirst().orElse(null);
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/highest", params = "sensor")
+    private @ResponseBody TemperatureDTO getHighestTemperatureForSensor(@RequestParam(name = "sensor", required = true) String sensorId) {
+        List<Temperature> list = new ArrayList<>();
+        temperaturePersister.findAll().forEach(list::add);
+
+        return mapToDTO(list.stream().max((o1, o2) -> Double.compare(o1.getTemperature(), o2.getTemperature())).get(), sensorId);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/lowest", params = "sensor")
+    private @ResponseBody TemperatureDTO getLowestTemperatureForSensor(@RequestParam(name = "sensor", required = true) String sensorId) {
+        List<Temperature> list = new ArrayList<>();
+        temperaturePersister.findAll().forEach(list::add);
+
+        return mapToDTO(list.stream().max((o1, o2) -> Double.compare(o2.getTemperature(), o1.getTemperature())).get(), sensorId);
+    }
+
     private TemperatureDTO mapToDTO(Temperature temperature, String id) {
         TemperatureDTO temperatureDTO = new TemperatureDTO();
         temperatureDTO.setTemperature(temperature.getTemperature());

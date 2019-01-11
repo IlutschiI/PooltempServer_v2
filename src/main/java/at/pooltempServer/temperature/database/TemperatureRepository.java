@@ -10,4 +10,5 @@ import java.util.Date;
 import java.util.List;
 
 public interface TemperatureRepository extends CrudRepository<Temperature, Long> {
+
 }
