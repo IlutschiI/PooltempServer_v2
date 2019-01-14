@@ -46,8 +46,11 @@ public class TemperatureController {
             sensor = new Sensor();
             sensor.setId(temp.getSensorID());
         }
-        sensor.addTemperature(new Temperature(temp.getTime(), temp.getTemperature()));
-        sensorRepository.save(sensor);
+        Temperature temperature = new Temperature();
+        temperature.setSensor(sensor);
+        temperature.setTemperature(temp.getTemperature());
+        temperature.setTime(temp.getTime());
+        temperaturePersister.save(temperature);
     }
 
     private void saveTemperatures(List<TemperatureRequest> temps) {
@@ -130,14 +133,14 @@ public class TemperatureController {
     private @ResponseBody double getAverageTemperatureForSensorOfYesterday(@RequestParam(name = "sensor", required = true) String sensorId) {
         Sensor s = sensorRepository.findOne(sensorId);
 
-        LocalDate localDate=LocalDate.now();
+        LocalDate localDate = LocalDate.now();
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-        List<Temperature> temps=temperaturePersister.findAllBySensorEqualsAndTimeAfter(s, date);
+        List<Temperature> temps = temperaturePersister.findAllBySensorEqualsAndTimeAfter(s, date);
 
-        double tempvalue=temps.stream().map(t->t.getTemperature()).reduce((a,b)->a+b).get();
+        double tempvalue = temps.stream().map(t -> t.getTemperature()).reduce((a, b) -> a + b).get();
 
-        return tempvalue/temps.size();
+        return tempvalue / temps.size();
     }
 
     private TemperatureDTO mapToDTO(Temperature temperature, String id) {
