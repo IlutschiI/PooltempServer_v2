@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.xml.ws.Response;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -122,6 +124,20 @@ public class TemperatureController {
         Sensor s = sensorRepository.findOne(sensorId);
         Temperature temperature = temperaturePersister.findTopBySensorEqualsOrderByTemperatureAsc(s);
         return mapToDTO(temperature);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/yesterday", params = "sensor")
+    private @ResponseBody double getAverageTemperatureForSensorOfYesterday(@RequestParam(name = "sensor", required = true) String sensorId) {
+        Sensor s = sensorRepository.findOne(sensorId);
+
+        LocalDate localDate=LocalDate.now();
+        Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        List<Temperature> temps=temperaturePersister.findAllBySensorEqualsAndTimeAfter(s, date);
+
+        double tempvalue=temps.stream().map(t->t.getTemperature()).reduce((a,b)->a+b).get();
+
+        return tempvalue/temps.size();
     }
 
     private TemperatureDTO mapToDTO(Temperature temperature, String id) {
