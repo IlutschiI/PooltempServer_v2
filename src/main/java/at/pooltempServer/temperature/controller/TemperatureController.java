@@ -6,6 +6,7 @@ import at.pooltempServer.temperature.database.TemperatureRepository;
 import at.pooltempServer.temperature.model.Temperature;
 import at.pooltempServer.temperature.model.TemperatureDTO;
 import at.pooltempServer.temperature.model.TemperatureRequest;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -76,11 +77,8 @@ public class TemperatureController {
 
     @RequestMapping(method = RequestMethod.GET)
     private @ResponseBody List<TemperatureDTO> getAllTemperatures() {
-        List<TemperatureDTO> temperatures = new ArrayList<>();
-        sensorRepository.findAll().forEach(sensor -> {
-            temperatures.addAll(sensor.getTemperatures().stream().map(temperature -> mapToDTO(temperature, sensor.getId())).collect(Collectors.toList()));
-        });
-        return temperatures;
+        List<Temperature> temperatures = Lists.newArrayList(temperaturePersister.findAll());
+        return temperatures.stream().map(this::mapToDTO).collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.GET, params = "since")
@@ -143,6 +141,16 @@ public class TemperatureController {
         return tempvalue / temps.size();
     }
 
+    @RequestMapping(method = RequestMethod.GET, path = "/count")
+    private @ResponseBody long getCountOfEntries() {
+        return temperaturePersister.countEntries();
+    }
+
+    @RequestMapping(method = RequestMethod.GET, path = "/count", params = "sensor")
+    private @ResponseBody long getCountOfEntries(@RequestParam(name = "sensor", required = true) String sensorId) {
+        return temperaturePersister.countAllBySensorEquals(sensorRepository.findOne(sensorId));
+    }
+
     private TemperatureDTO mapToDTO(Temperature temperature, String id) {
         TemperatureDTO temperatureDTO = new TemperatureDTO();
         temperatureDTO.setTemperature(temperature.getTemperature());
@@ -154,7 +162,9 @@ public class TemperatureController {
     private TemperatureDTO mapToDTO(Temperature temperature) {
         TemperatureDTO temperatureDTO = new TemperatureDTO();
         temperatureDTO.setTemperature(temperature.getTemperature());
-        temperatureDTO.setSensorID(temperature.getSensor().getId());
+        if (temperature.getSensor() != null) {
+            temperatureDTO.setSensorID(temperature.getSensor().getId());
+        }
         temperatureDTO.setTime(temperature.getTime());
         return temperatureDTO;
     }

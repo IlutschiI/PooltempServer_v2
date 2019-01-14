@@ -15,4 +15,9 @@ public interface TemperatureRepository extends CrudRepository<Temperature, Long>
     Temperature findTopBySensorEqualsOrderByTemperatureAsc(Sensor sensor);
 
     List<Temperature> findAllBySensorEqualsAndTimeAfter(Sensor sensor, Date time);
+
+    @Query("select count(t) from Temperature t")
+    long countEntries();
+
+    long countAllBySensorEquals(Sensor sensor);
 }
