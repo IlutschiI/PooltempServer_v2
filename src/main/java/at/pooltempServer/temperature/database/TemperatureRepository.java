@@ -1,14 +1,18 @@
 package at.pooltempServer.temperature.database;
 
+import at.pooltempServer.sensor.model.Sensor;
+import at.pooltempServer.temperature.model.Temperature;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-
-import at.pooltempServer.temperature.model.Temperature;
-import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
 
 public interface TemperatureRepository extends CrudRepository<Temperature, Long> {
 
+    Temperature findTopBySensorEqualsOrderByTemperatureDesc(Sensor sensor);
+
+    Temperature findTopBySensorEqualsOrderByTemperatureAsc(Sensor sensor);
+
+    List<Temperature> findAllBySensorEqualsAndTimeAfter(Sensor sensor, Date time);
 }
