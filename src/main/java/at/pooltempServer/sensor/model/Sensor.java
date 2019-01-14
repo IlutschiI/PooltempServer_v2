@@ -15,8 +15,7 @@ public class Sensor {
 	@Id
 	private String id;
 	private String name;
-	@JoinColumn(name = "sensorid", nullable = false)
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "temperature")
 	private List<Temperature> temperatures=new ArrayList<>();
 
 	public String getId() {

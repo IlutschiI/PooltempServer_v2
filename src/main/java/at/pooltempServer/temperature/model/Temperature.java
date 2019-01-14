@@ -14,6 +14,9 @@ public class Temperature {
     private long id;
     private Date time;
     private double temperature;
+    @ManyToOne
+    @JoinColumn(name = "sensorid")
+    private Sensor sensor;
 
     public Temperature() {
     }
@@ -47,4 +50,11 @@ public class Temperature {
         this.temperature = temperature;
     }
 
+    public Sensor getSensor() {
+        return sensor;
+    }
+
+    public void setSensor(Sensor sensor) {
+        this.sensor = sensor;
+    }
 }
