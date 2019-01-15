@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "*")
@@ -98,7 +100,7 @@ public class TemperatureController {
             return new ArrayList<>();
         }
 
-        return sensor.getTemperatures().stream().map(temp -> mapToDTO(temp, sensorId)).collect(Collectors.toList());
+        return temperaturePersister.findAllBySensorEquals(sensor).stream().map(temp -> mapToDTO(temp, sensorId)).collect(Collectors.toList());
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/latest", params = "sensor")
@@ -108,9 +110,7 @@ public class TemperatureController {
             return null;
         }
 
-        List<TemperatureDTO> temperatureDTOS = sensor.getTemperatures().stream().map(temp -> mapToDTO(temp, sensorId)).collect(Collectors.toList());
-        temperatureDTOS.sort((temp1, temp2) -> temp2.getTime().compareTo(temp1.getTime()));
-        return temperatureDTOS.stream().findFirst().orElse(null);
+        return mapToDTO(temperaturePersister.findFirstBySensorEqualsOrderByTimeDesc(sensor));
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/highest", params = "sensor")

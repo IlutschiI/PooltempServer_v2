@@ -20,4 +20,8 @@ public interface TemperatureRepository extends CrudRepository<Temperature, Long>
     long countEntries();
 
     long countAllBySensorEquals(Sensor sensor);
+
+    List<Temperature> findAllBySensorEquals(Sensor sensor);
+
+    Temperature findFirstBySensorEqualsOrderByTimeDesc(Sensor sensor);
 }
