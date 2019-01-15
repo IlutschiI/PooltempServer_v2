@@ -127,7 +127,7 @@ public class TemperatureController {
         return mapToDTO(temperature);
     }
 
-    @RequestMapping(method = RequestMethod.GET, path = "/yesterday", params = "sensor")
+    @RequestMapping(method = RequestMethod.GET, path = "/lastDay", params = "sensor")
     private @ResponseBody double getAverageTemperatureForSensorOfYesterday(@RequestParam(name = "sensor", required = true) String sensorId) {
         Sensor s = sensorRepository.findOne(sensorId);
 
