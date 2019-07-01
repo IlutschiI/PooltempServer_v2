@@ -29,7 +29,7 @@ public class SensorController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	private @ResponseBody Sensor addSensorForId(@RequestBody Sensor sensor) {
-		if(!sensorRepository.exists(sensor.getId())) {
+		if(!sensorRepository.existsById(sensor.getId())) {
 			sensorRepository.save(sensor);
 			return sensor;
 		}

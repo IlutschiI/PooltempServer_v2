@@ -44,7 +44,7 @@ public class TemperatureController {
         if (temp.getTime() == null) {
             temp.setTime(new Date());
         }
-        Sensor sensor = sensorRepository.findOne(temp.getSensorID());
+        Sensor sensor = sensorRepository.findById(temp.getSensorID()).orElse(null);
         if (sensor == null) {
             sensor = new Sensor();
             sensor.setId(temp.getSensorID());
@@ -60,7 +60,7 @@ public class TemperatureController {
         Map<String, List<TemperatureRequest>> tempMap = temps.stream().collect(Collectors.groupingBy(t -> t.getSensorID()));
 
         for (Map.Entry<String, List<TemperatureRequest>> entry : tempMap.entrySet()) {
-            Sensor sensor = sensorRepository.findOne(entry.getKey());
+            Sensor sensor = sensorRepository.findById(entry.getKey()).orElse(null);
             if (sensor == null) {
                 sensor = new Sensor();
                 sensor.setId(entry.getKey());
@@ -95,7 +95,7 @@ public class TemperatureController {
 
     @RequestMapping(method = RequestMethod.GET, params = "sensor")
     private @ResponseBody List<TemperatureDTO> getTemperaturesForSensor(@RequestParam(name = "sensor", required = true) String sensorId) {
-        Sensor sensor = sensorRepository.findOne(sensorId);
+        Sensor sensor = sensorRepository.findById(sensorId).orElse(null);
         if (sensor == null) {
             return new ArrayList<>();
         }
@@ -105,7 +105,7 @@ public class TemperatureController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/latest", params = "sensor")
     private @ResponseBody TemperatureDTO getLatestTemperaturesForSensor(@RequestParam(name = "sensor", required = true) String sensorId) {
-        Sensor sensor = sensorRepository.findOne(sensorId);
+        Sensor sensor = sensorRepository.findById(sensorId).orElse(null);
         if (sensor == null) {
             return null;
         }
@@ -115,21 +115,21 @@ public class TemperatureController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/highest", params = "sensor")
     private @ResponseBody TemperatureDTO getHighestTemperatureForSensor(@RequestParam(name = "sensor", required = true) String sensorId) {
-        Sensor s = sensorRepository.findOne(sensorId);
+        Sensor s = sensorRepository.findById(sensorId).orElse(null);
         Temperature temperature = temperaturePersister.findTopBySensorEqualsOrderByTemperatureDesc(s);
         return mapToDTO(temperature);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/lowest", params = "sensor")
     private @ResponseBody TemperatureDTO getLowestTemperatureForSensor(@RequestParam(name = "sensor", required = true) String sensorId) {
-        Sensor s = sensorRepository.findOne(sensorId);
+        Sensor s = sensorRepository.findById(sensorId).get();
         Temperature temperature = temperaturePersister.findTopBySensorEqualsOrderByTemperatureAsc(s);
         return mapToDTO(temperature);
     }
 
     @RequestMapping(method = RequestMethod.GET, path = "/lastDay", params = "sensor")
     private @ResponseBody double getAverageTemperatureForSensorOfYesterday(@RequestParam(name = "sensor", required = true) String sensorId) {
-        Sensor s = sensorRepository.findOne(sensorId);
+        Sensor s = sensorRepository.findById(sensorId).get();
 
         LocalDate localDate = LocalDate.now();
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -148,7 +148,7 @@ public class TemperatureController {
 
     @RequestMapping(method = RequestMethod.GET, path = "/count", params = "sensor")
     private @ResponseBody long getCountOfEntries(@RequestParam(name = "sensor", required = true) String sensorId) {
-        return temperaturePersister.countAllBySensorEquals(sensorRepository.findOne(sensorId));
+        return temperaturePersister.countAllBySensorEquals(sensorRepository.findById(sensorId).get());
     }
 
     private TemperatureDTO mapToDTO(Temperature temperature, String id) {
