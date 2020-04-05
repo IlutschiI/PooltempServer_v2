@@ -14,7 +14,7 @@ public class Temperature {
     private long id;
     private Date time;
     private double temperature;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "sensorid")
     private Sensor sensor;
 
