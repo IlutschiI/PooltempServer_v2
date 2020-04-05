@@ -5,15 +5,12 @@ import java.util.List;
 import at.pooltempServer.sensor.model.SensorDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import at.pooltempServer.sensor.database.SensorRepository;
 import at.pooltempServer.sensor.model.Sensor;
 
-@Controller
+@RestController
 @RequestMapping("/sensor")
 public class SensorController {
 
@@ -29,7 +26,7 @@ public class SensorController {
 	
 	@RequestMapping(method = RequestMethod.POST)
 	private @ResponseBody Sensor addSensorForId(@RequestBody Sensor sensor) {
-		if(!sensorRepository.exists(sensor.getId())) {
+		if(!sensorRepository.existsById(sensor.getId())) {
 			sensorRepository.save(sensor);
 			return sensor;
 		}

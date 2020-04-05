@@ -1,5 +1,7 @@
 package at.pooltempServer.temperature.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,6 +10,7 @@ import java.util.Date;
 
 public class TemperatureDTO {
 
+	@JsonFormat(shape = JsonFormat.Shape.NUMBER_INT)
 	private Date time;
 	private double temperature;
 	private String sensorID;

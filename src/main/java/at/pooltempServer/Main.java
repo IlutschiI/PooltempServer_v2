@@ -10,7 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @ComponentScan("at.pooltempServer")
 @EntityScan("at.pooltempServer")
-@EnableAutoConfiguration
 @EnableJpaRepositories(basePackages = "at.pooltempServer")
 public class Main {
 

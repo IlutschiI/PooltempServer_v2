@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Temperature {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private Date time;
     private double temperature;
